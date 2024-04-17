@@ -1,21 +1,32 @@
-let intialState = {
-    phoneList: [],
+let initialState = {
+    phoneList: [
+        { id: 1, name: "테스트 1", phone: "01012341234" },
+        { id: 2, name: "테스트 2", phone: "01023452345" },
+    ],
+    keyword: ''
 };
 
-const reducer = (state = intialState, action) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case "add":
-            const newPhoneList = state.push(action.payload.phone);
-            return { ...state, phoneList: newPhoneList };
-        case "edit":
-            // id, 새로운 이름과 연락처 받아와서 수정
-            return { ...state, phoneList: newPhoneList };
-        case "delete":
-            // id 값 받아와서 filter 사용해서 삭제
-            return { ...state, phoneList: newPhoneList };
+        case "ADD_INFO":
+            return { ...state, phoneList: [...state.phoneList, action.payload.info] };
+        case "EDIT_INFO":
+            const editPhoneList = state.phoneList.map((item) => {
+                if (item.id === action.payload.info.id) {
+                    return action.payload.info
+                } else {
+                    return item
+                }
+            })
+            return { ...state, phoneList: editPhoneList }
+        case "DELETE_INFO":
+            const deletePhoneList = state.phoneList.filter((item) => item.id !== action.payload.id)
+            return { ...state, phoneList: deletePhoneList }
+        case "SET_KEYWORD":
+            return { ...state, keyword: action.payload.keyword }
         default:
             return state;
     };
 };
 
-export default reducer
+export default reducer;
